@@ -1,12 +1,12 @@
 const express = require("express")
 const path = require('path');
 const publicStaticPath = path.join(__dirname, '../public');
-const partialsPath = path.join(__dirname, '../templates/partials');
-const viewsPath = path.join(__dirname, '../templates/views');
+
+const temp_path = path.join(__dirname, "../views")
 const app = express();
 const ejs = require('ejs');
 app.set("view engine", 'ejs')
-app.set('views', viewsPath);
+app.set('views', temp_path);
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(publicStaticPath));
 
