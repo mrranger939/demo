@@ -69,6 +69,17 @@
                         
                         <input type="submit" value="Update Course">
                     </form>
+                    <!-- Display registered users -->
+                    <h4>Registered Users</h4>
+                    <% if (course.registeredUsers.length > 0) { %>
+                        <ul>
+                            <% course.registeredUsers.forEach(function(user) { %>
+                                <li><%= user %></li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p>No users registered for this course yet.</p>
+                    <% } %>
                               <!-- Form to add registered user -->
                                <div style="padding: 1rem;">
 

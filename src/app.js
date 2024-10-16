@@ -140,7 +140,7 @@ app.get('/courses',authenticateToken, async (req, res) => {
 });
 
 // Route to fetch a single course by ID
-app.get('/courses/:id',authenticateToken, async (req, res) => {
+app.get('/courses/:id', authenticateToken, async (req, res) => {
     const username = req.user ? req.user.username : null;
     const useremail = req.user ? req.user.email : null;
     try {
@@ -148,12 +148,14 @@ app.get('/courses/:id',authenticateToken, async (req, res) => {
         if (!course) {
             return res.status(404).send('Course not found');
         }
-        res.render('courseDetails', { course:course,username: username , useremail:useremail}); 
+
+        res.render('courseDetails', { course: course, username: username, useremail: useremail });
     } catch (err) {
         console.error('Error fetching course:', err);
         res.status(500).send('Error fetching course');
     }
 });
+
 /* rendering the pages */
 
 /* handling post requests */
@@ -177,7 +179,7 @@ app.post('/signin', async (req, res)=>{
         console.log('Error occurred while saving the user')})
         
     
-    res.redirect('/')
+    res.redirect('/login')
 })
 
 
@@ -241,32 +243,46 @@ app.post('/submit-course', async (req, res) => {
 
 
 app.post('/courses/:id/add-user', async (req, res) => {
-    const { id } = req.params; 
-    const { email } = req.body; 
+    const { id } = req.params;  // Course ID
+    const { email } = req.body; // User's email from the request body
 
     try {
-        
+        // Find the course by its ID
         const course = await Course.findById(id);
-
         if (!course) {
             return res.status(404).send('Course not found');
         }
 
-        
+        // Check if the user is already registered for the course
         if (course.registeredUsers.includes(email)) {
             return res.status(400).send('User already registered');
         }
 
+        // Add the user's email to the course's registeredUsers array
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
         course.registeredUsers.push(email);
-        await course.save();  
+        await course.save();
 
-        
+        // Find the user by their email
+
+        // Check if the course ID is already in the user's registeredCourses array
+        if (!user.registeredCourses.includes(id)) {
+            // Add the course ID to the user's registeredCourses array
+            user.registeredCourses.push(id);
+            await user.save();  // Save the updated user document
+        }
+
+        // Redirect to the course details page or send a success response
         res.redirect(`/courses/${id}`);
     } catch (error) {
-        console.error(error);
+        console.error('Server error:', error);
         res.status(500).send('Server error');
     }
 });
+
 
 app.post('/courses/:id/edit', async (req, res) => {
     const { courseName, coursePrice, courseLink, courseImage, startDate, courseDetails, courseDay, courseTime, syllabus } = req.body;
