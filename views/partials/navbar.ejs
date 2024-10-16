@@ -7,7 +7,7 @@
             <div class="container-fluid">
               <a class="" href="#home"
                 ><img
-                  src="images/logo.jpg"
+                  src="/images/logo.jpg"
                   style="height: 35px; width: 35px; border-radius: 5rem"
                   alt=""
               /></a>
@@ -29,13 +29,13 @@
               >
                 <ul class="navbar-nav row">
                   <li class="nav-item col">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                   </li>
                   <li class="nav-item col">
                     <a class="nav-link" href="#">Dashboard</a>
                   </li>
                   <li class="nav-item col">
-                    <a class="nav-link" href="#">Courses</a>
+                    <a class="nav-link" href="/courses">Courses</a>
                   </li>
                   <li class="nav-item col">
                     <a class="nav-link" href="#">Internships</a>
@@ -43,6 +43,15 @@
                   <li class="nav-item col">
                     <a class="nav-link" href="#">Contact </a>
                   </li>
+                  <li class="nav-item col">
+                    <a class="nav-link" href="<%= username ? '/profile' : '/login' %>"><%= username ? username : 'Login' %></a>
+                </li>
+                <% if (username) { %>
+                <li class="nav-item col">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                <% } %>
+                
                 </ul>
               </div>
             </div>

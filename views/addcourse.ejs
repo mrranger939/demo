@@ -1,0 +1,125 @@
+<%- include("partials/header", { title: "Page" }) -%>
+
+<style>
+    .syllabus-item {
+        margin-bottom: 20px;
+    }
+    .subtopic-item {
+        margin-left: 20px;
+    }
+</style>
+</head>
+          <!-- navbar  -->
+
+<%- include("partials/navbar") -%>
+    <!-- navbar  -->
+    <!-- body -->
+    <div class="container-fluid"  >
+      <div class="row" >
+        <div class="col-md-11 col-11 mx-auto" style="margin-top: 5rem;">
+          <div style="padding-top: 1rem;">
+            <h2>Course Form</h2>
+            <form action="/submit-course" method="POST">
+                <label for="courseName">Course Name:</label><br>
+                <input type="text" id="courseName" name="courseName" required><br><br>
+        
+                <label for="coursePrice">Course Price:</label><br>
+                <input type="number" id="coursePrice" name="coursePrice" required><br><br>
+        
+                <label for="courseLink">Course Google Link:</label><br>
+                <input type="url" id="courseLink" name="courseLink" required><br><br>
+        
+                <label for="startDate">Start Date:</label><br>
+                <input type="date" id="startDate" name="startDate" required><br><br>
+        
+                <label for="courseDetails">Course Details:</label><br>
+                <textarea id="courseDetails" name="courseDetails" rows="4" cols="50" required></textarea><br><br>
+        
+                <label for="courseImage">Course Dashboard Image (Google Drive link):</label><br>
+                <input type="url" id="courseImage" name="courseImage" placeholder="Enter Google Drive link" required><br><br>
+                
+                <label for="courseDay">Course Day:</label><br>
+                <select id="courseDay" name="courseDay" required>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select><br><br>
+                
+                <label for="courseTime">Course Time:</label><br>
+                <input type="time" id="courseTime" name="courseTime" required><br><br>
+                <h3>Syllabus</h3>
+                <div id="syllabus">
+                    <!-- Initial Syllabus Topic -->
+                    <div class="syllabus-item">
+                        <label for="topic_1">Topic 1:</label>
+                        <input type="text" id="topic_1" name="syllabus[0][topic]" required><br>
+                        
+                        <div id="subtopics_1">
+                            <label for="subtopic_1_1">Subtopic 1.1:</label>
+                            <input type="text" id="subtopic_1_1" name="syllabus[0][subtopics][]" required><br>
+                        </div>
+                        <button type="button" onclick="addSubtopic(1)">Add Subtopic</button><br><br>
+                    </div>
+                </div>
+        
+                <button type="button" id="addSyllabusBtn">Add Topic</button><br><br>
+        
+                <input type="submit" value="Submit Course">
+            </form>
+        
+            <script>
+                let topicCount = 1; // To keep track of the number of topics
+                let subtopicCount = [1]; // To keep track of the number of subtopics per topic
+        
+                // Function to add a new topic
+                document.getElementById('addSyllabusBtn').addEventListener('click', function() {
+                    topicCount++;
+                    subtopicCount.push(1); // Start with one subtopic for the new topic
+        
+                    const syllabusDiv = document.createElement('div');
+                    syllabusDiv.classList.add('syllabus-item');
+        
+                    syllabusDiv.innerHTML = `
+                        <label for="topic_${topicCount}">Topic ${topicCount}:</label>
+                        <input type="text" id="topic_${topicCount}" name="syllabus[${topicCount - 1}][topic]" required><br>
+                        
+                        <div id="subtopics_${topicCount}">
+                            <label for="subtopic_${topicCount}_1">Subtopic ${topicCount}.1:</label>
+                            <input type="text" id="subtopic_${topicCount}_1" name="syllabus[${topicCount - 1}][subtopics][]" required><br>
+                        </div>
+                        <button type="button" onclick="addSubtopic(${topicCount})">Add Subtopic</button><br><br>
+                    `;
+        
+                    document.getElementById('syllabus').appendChild(syllabusDiv);
+                });
+        
+                // Function to add a subtopic to a specific topic
+                function addSubtopic(topicId) {
+                    subtopicCount[topicId - 1]++;
+                    const subtopicDiv = document.createElement('div');
+                    subtopicDiv.classList.add('subtopic-item');
+                    
+                    subtopicDiv.innerHTML = `
+                        <label for="subtopic_${topicId}_${subtopicCount[topicId - 1]}">Subtopic ${topicId}.${subtopicCount[topicId - 1]}:</label>
+                        <input type="text" id="subtopic_${topicId}_${subtopicCount[topicId - 1]}" name="syllabus[${topicId - 1}][subtopics][]" required><br>
+                    `;
+        
+                    document.getElementById(`subtopics_${topicId}`).appendChild(subtopicDiv);
+                }
+            </script>
+            <!-- content here -->
+          </div>
+
+          <!-- body -->
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <%- include("partials/footer") -%>

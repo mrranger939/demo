@@ -8,6 +8,7 @@
    font-weight: 500;
 }
 .nav-row{
+  z-index: 10000;
     height: 6rem;
     backdrop-filter: blur(3px);
     position: fixed;
@@ -16,11 +17,11 @@
 .navbar-nav{
     left: 50%;
 }
-section{
+/* section{
     height: 90vh;
     padding-top: 5rem;
     z-index: 2;
-}
+} */
 .mynavbar{
     margin-bottom: 1.5rem;
 }
@@ -30,7 +31,7 @@ section{
 .nav-link:focus{
     color: white;
 }
-a:hover,.nav-link:hover {
+nav a:hover,.nav-link:hover {
     background: linear-gradient(165deg, #2525ee, #7113ec, #140124, #0f0116);
     box-shadow: 4px 4px 6px rgba(194, 127, 250, 0.1);
     color: white;

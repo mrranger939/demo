@@ -1,0 +1,47 @@
+<%- include("partials/header", { title: "Page" }) -%>
+<link rel="stylesheet" href="styles/login.css" />
+</head>
+          <!-- navbar  -->
+
+
+    <!-- navbar  -->
+    <!-- body -->
+    <div class="container-fluid"  >
+      <div class="row" >
+        <div class="col-md-11 col-11 mx-auto" style="margin-top: 5rem;">
+          <div style="padding-top: 1rem;">
+
+            <!-- content here -->
+<div class="body">
+
+    <div class="wrapper">
+        <div class="title"><span>Login Form</span></div>
+        <form action="/login" method="POST">
+            <div class="row">
+                <i class="fas fa-user"></i>
+                <input name="username" type="text" placeholder="Email or Phone" required />
+            </div>
+            <div class="row">
+                <i class="fas fa-lock"></i>
+                <input name="password" type="password" placeholder="Password" required />
+            </div>
+            <div class="pass"><a href="#">Forgot password?</a></div>
+            <div class="row button">
+                <input type="submit" value="Login" />
+            </div>
+            <div class="signup-link">Not a member? <a href="/signin">Signup now</a></div>
+        </form>
+    </div>
+    
+</div>
+    
+</div>
+
+          <!-- body -->
+
+
+        </div>
+      </div>
+    </div>
+
+

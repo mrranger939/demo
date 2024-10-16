@@ -1,0 +1,156 @@
+<%- include("partials/header", { title: "Edit Course" }) -%>
+</head>
+<!-- navbar  -->
+<%- include("partials/navbar") -%>
+<!-- navbar  -->
+<!-- body -->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-11 col-11 mx-auto" style="margin-top: 5rem;">
+            <div style="padding-top: 1rem;">
+
+                <!-- Show admin-specific content if the user is admin -->
+                <% if (useremail && useremail === 'admin@gmail.com') { %>
+                    <h2>Edit Course: <%= course.courseName %></h2>
+                    
+                    <!-- Editable Form -->
+                    <form action="/courses/<%= course._id %>/edit" method="POST">
+                        <label for="courseName">Course Name:</label><br>
+                        <input type="text" id="courseName" name="courseName" value="<%= course.courseName %>" required><br><br>
+                
+                        <label for="coursePrice">Course Price:</label><br>
+                        <input type="number" id="coursePrice" name="coursePrice" value="<%= course.coursePrice %>" required><br><br>
+                
+                        <label for="courseLink">Course Google Link:</label><br>
+                        <input type="url" id="courseLink" name="courseLink" value="<%= course.courseLink %>" required><br><br>
+                
+                        <label for="startDate">Start Date:</label><br>
+                        <input type="date" id="startDate" name="startDate" value="<%= new Date(course.startDate).toISOString().substring(0, 10) %>" required><br><br>
+                
+                        <label for="courseDetails">Course Details:</label><br>
+                        <textarea id="courseDetails" name="courseDetails" rows="4" cols="50" required><%= course.courseDetails %></textarea><br><br>
+                        <label for="courseImage">Course Dashboard Image (Google Drive link):</label><br>
+                        <input type="url" id="courseImage" name="courseImage" value="https://drive.google.com/file/d/<%= course.courseImage %>/view?usp=drive_link" required><br><br>
+                        
+                        <label for="courseDay">Course Day:</label><br>
+                        <select id="courseDay" name="courseDay" required>
+                            <option value="Monday" <%= course.courseDay === 'Monday' ? 'selected' : '' %>>Monday</option>
+                            <option value="Tuesday" <%= course.courseDay === 'Tuesday' ? 'selected' : '' %>>Tuesday</option>
+                            <option value="Wednesday" <%= course.courseDay === 'Wednesday' ? 'selected' : '' %>>Wednesday</option>
+                            <option value="Thursday" <%= course.courseDay === 'Thursday' ? 'selected' : '' %>>Thursday</option>
+                            <option value="Friday" <%= course.courseDay === 'Friday' ? 'selected' : '' %>>Friday</option>
+                            <option value="Saturday" <%= course.courseDay === 'Saturday' ? 'selected' : '' %>>Saturday</option>
+                            <option value="Sunday" <%= course.courseDay === 'Sunday' ? 'selected' : '' %>>Sunday</option>
+                        </select><br><br>
+                
+                        <label for="courseTime">Course Time:</label><br>
+                        <input type="time" id="courseTime" name="courseTime" value="<%= course.courseTime %>" required><br><br>
+                        
+                        <!-- Syllabus editing -->
+                        <h4>Syllabus</h4>
+                        <div id="syllabus">
+                            <% course.syllabus.forEach((item, index) => { %>
+                                <div class="syllabus-item">
+                                    <label for="topic_<%= index + 1 %>">Topic <%= index + 1 %>:</label>
+                                    <input type="text" id="topic_<%= index + 1 %>" name="syllabus[<%= index %>][topic]" value="<%= item.topic %>" required><br>
+                                    
+                                    <div id="subtopics_<%= index + 1 %>">
+                                        <% item.subtopics.forEach((subtopic, subIndex) => { %>
+                                            <label for="subtopic_<%= index + 1 %>_<%= subIndex + 1 %>">Subtopic <%= index + 1 %>.<%= subIndex + 1 %>:</label>
+                                            <input type="text" id="subtopic_<%= index + 1 %>_<%= subIndex + 1 %>" name="syllabus[<%= index %>][subtopics][]" value="<%= subtopic %>" required><br>
+                                        <% }) %>
+                                    </div>
+                                    <button type="button" onclick="addSubtopic(<%= index + 1 %>)">Add Subtopic</button><br><br>
+                                </div>
+                            <% }) %>
+                        </div>
+                        
+                        <button type="button" id="addSyllabusBtn">Add Topic</button><br><br>
+                        
+                        <input type="submit" value="Update Course">
+                    </form>
+                              <!-- Form to add registered user -->
+                               <div style="padding: 1rem;">
+
+                                   <h4>Register a User</h4>
+                                   <form action="/courses/<%= course._id %>/add-user" method="POST">
+                                     <div class="form-group">
+                                       <label for="email">User Email:</label>
+                                       <input type="email" class="form-control" id="email" name="email" required>
+                                     </div>
+                                     <button type="submit" class="btn btn-primary mt-2">Add User</button>
+                                   </form>
+                               </div>
+                <% } else { %>
+                    <!-- Normal view for non-admin users -->
+                    <h2><%= course.courseName %></h2>
+                    <img src="https://drive.google.com/thumbnail?id=<%= course.courseImage %>" class="img-fluid" alt="<%= course.courseName %>">
+                    <p><strong>Price:</strong> $<%= course.coursePrice %></p>
+                    <p><strong>Start Date:</strong> <%= new Date(course.startDate).toLocaleDateString() %></p>
+                    <p><strong>Course Details:</strong> <%= course.courseDetails %></p>
+                    <p><strong>Course Day:</strong> <%= course.courseDay %></p>
+                    <p><strong>Course Time:</strong> <%= course.courseTime %></p>
+
+                    
+                    <h4>Syllabus</h4>
+                    <ul>
+                        <% course.syllabus.forEach(item => { %>
+                            <li><strong><%= item.topic %></strong>
+                                <ul>
+                                    <% item.subtopics.forEach(subtopic => { %>
+                                        <li><%= subtopic %></li>
+                                    <% }) %>
+                                </ul>
+                            </li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+
+                <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- footer -->
+<%- include("partials/footer") -%>
+
+<script>
+    // Same JavaScript for adding topics and subtopics dynamically as in add-course form
+    let topicCount = <%= course.syllabus.length %>; // Start from the current syllabus count
+    let subtopicCount = course.syllabus.map(topic => topic.subtopics.length);
+
+    document.getElementById('addSyllabusBtn').addEventListener('click', function() {
+        topicCount++;
+        subtopicCount.push(1); // Start with one subtopic for the new topic
+
+        const syllabusDiv = document.createElement('div');
+        syllabusDiv.classList.add('syllabus-item');
+
+        syllabusDiv.innerHTML = `
+            <label for="topic_${topicCount}">Topic ${topicCount}:</label>
+            <input type="text" id="topic_${topicCount}" name="syllabus[${topicCount - 1}][topic]" required><br>
+            
+            <div id="subtopics_${topicCount}">
+                <label for="subtopic_${topicCount}_1">Subtopic ${topicCount}.1:</label>
+                <input type="text" id="subtopic_${topicCount}_1" name="syllabus[${topicCount - 1}][subtopics][]" required><br>
+            </div>
+            <button type="button" onclick="addSubtopic(${topicCount})">Add Subtopic</button><br><br>
+        `;
+
+        document.getElementById('syllabus').appendChild(syllabusDiv);
+    });
+
+    function addSubtopic(topicId) {
+        subtopicCount[topicId - 1]++;
+        const subtopicDiv = document.createElement('div');
+        subtopicDiv.classList.add('subtopic-item');
+        
+        subtopicDiv.innerHTML = `
+            <label for="subtopic_${topicId}_${subtopicCount[topicId - 1]}">Subtopic ${topicId}.${subtopicCount[topicId - 1]}:</label>
+            <input type="text" id="subtopic_${topicId}_${subtopicCount[topicId - 1]}" name="syllabus[${topicId - 1}][subtopics][]" required><br>
+        `;
+
+        document.getElementById(`subtopics_${topicId}`).appendChild(subtopicDiv);
+    }
+</script>

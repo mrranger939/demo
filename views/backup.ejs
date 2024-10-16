@@ -1,0 +1,51 @@
+<%- include("partials/header", { title: "Page" }) -%>
+
+</head>
+          <!-- navbar  -->
+
+<%- include("partials/navbar") -%>
+    <!-- navbar  -->
+    <!-- body -->
+    <div class="container-fluid"  >
+      <div class="row" >
+        <div class="col-md-11 col-11 mx-auto" style="margin-top: 5rem;">
+          <div style="padding-top: 1rem;">
+
+            <!-- content here -->
+          
+          
+            <div class="container mt-5">
+                <h2><%= course.courseName %></h2>
+                
+                <img src="https://drive.google.com/thumbnail?id=<%= course.courseImage %>" class="img-fluid" alt="<%= course.courseName %>">
+                <p><strong>Price:</strong> $<%= course.coursePrice %></p>
+                <p><strong>Start Date:</strong> <%= new Date(course.startDate).toLocaleDateString() %></p>
+                <p><strong>Course Details:</strong> <%= course.courseDetails %></p>
+                <p><strong>Course Day:</strong> <%= course.courseDay %></p>
+                <p><strong>Course Time:</strong> <%= course.courseTime %></p>
+                
+                <h4>Syllabus</h4>
+                <ul>
+                    <% course.syllabus.forEach(item => { %>
+                        <li><strong><%= item.topic %></strong>
+                            <ul>
+                                <% item.subtopics.forEach(subtopic => { %>
+                                    <li><%= subtopic %></li>
+                                <% }) %>
+                            </ul>
+                        </li>
+                    <% }) %>
+                </ul>
+        
+                <a href="/courses" class="btn btn-secondary">Back to Courses</a>
+            </div>
+          
+          
+          </div>
+          <!-- body -->
+        </div>
+      </div>
+    </div>
+
+    <!-- footer -->
+    <%- include("partials/footer") -%>
